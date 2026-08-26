@@ -42,7 +42,9 @@ jobs:
 
       - name: Deploy dist to server
         run: |
-          rsync -avz --delete \
+          # --no-owner/--no-group: don't let rsync preserve the runner's uid
+          # (1001) on the server; files land owned by the SSH user (root).
+          rsync -avz --delete --no-owner --no-group \
             -e "ssh -i $HOME/.ssh/deploy_key -o ConnectTimeout=20" \
             ./dist/ \
             "${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/root/app/TransPlatformManagement/dist/"
