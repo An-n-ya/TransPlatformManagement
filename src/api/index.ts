@@ -1,0 +1,10 @@
+/** Unified API layer entry. */
+export { http, request, ApiError, BASE_URL } from '@/api/http'
+export { authApi } from '@/api/modules/auth'
+export { userApi } from '@/api/modules/user'
+export { contentApi } from '@/api/modules/content'
+export { topicApi } from '@/api/modules/topic'
+export { invitationApi } from '@/api/modules/invitation'
+export type { PageParams, SearchUsersParams } from '@/api/modules/user'
+export type { ListPostsParams } from '@/api/modules/content'
+export type * from '@/api/types'

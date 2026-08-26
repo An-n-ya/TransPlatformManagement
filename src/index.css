@@ -1,0 +1,127 @@
+@import "tailwindcss";
+
+@plugin "tailwindcss-animate";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: #ffffff;
+  --color-foreground: #171717;
+  --color-card: #f5f5f5;
+  --color-card-foreground: #171717;
+  --color-popover: #ffffff;
+  --color-popover-foreground: #171717;
+  --color-primary: #4b3fe3;
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #f5f5f5;
+  --color-secondary-foreground: #171717;
+  --color-muted: #f5f5f5;
+  --color-muted-foreground: #404040;
+  --color-accent: #f5f5f5;
+  --color-accent-foreground: #171717;
+  --color-destructive: #e8463a;
+  --color-destructive-foreground: #ffffff;
+  --color-border: color-mix(in srgb, #737373 12%, transparent);
+  --color-input: color-mix(in srgb, #737373 12%, transparent);
+  --color-ring: #4b3fe3;
+
+  --color-chart-1: #4b3fe3;
+  --color-chart-2: #22a5f7;
+  --color-chart-3: #1dc981;
+  --color-chart-4: #f87454;
+  --color-chart-5: #edaa45;
+
+  --color-sidebar: #ffffff;
+  --color-sidebar-foreground: #171717;
+  --color-sidebar-primary: #4b3fe3;
+  --color-sidebar-primary-foreground: #ffffff;
+  --color-sidebar-accent: #f5f5f5;
+  --color-sidebar-accent-foreground: #171717;
+  --color-sidebar-border: color-mix(in srgb, #737373 12%, transparent);
+  --color-sidebar-ring: #4b3fe3;
+
+  --color-success: #15a877;
+  --color-success-foreground: #ffffff;
+  --color-warning: #e27900;
+  --color-warning-foreground: #ffffff;
+  --color-alert: #fea900;
+  --color-alert-foreground: #ffffff;
+  --color-info: #2f74ff;
+  --color-info-foreground: #ffffff;
+
+  --color-brand-50: #f2f7ff;
+  --color-brand-100: #e5eaff;
+  --color-brand-200: #cfd8ff;
+  --color-brand-300: #aab7ff;
+  --color-brand-400: #8894ff;
+  --color-brand-500: #6a6fff;
+  --color-brand-600: #4b3fe3;
+  --color-brand-700: #3f31c6;
+  --color-brand-800: #2c2290;
+  --color-brand-900: #1a1759;
+
+  --font-sans: "SF Pro Text", "PingFang SC", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --font-metric: "Inter", "SF Pro Text", "PingFang SC", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 10px;
+  --radius-2xl: 12px;
+  --radius-3xl: 16px;
+
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: "tnum" 1, "lnum" 1;
+  }
+  .metric-value {
+    font-family: var(--font-metric);
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1, "lnum" 1;
+  }
+  .mono {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .scrollbar-thin {
+    scrollbar-width: thin;
+  }
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: color-mix(in srgb, #737373 24%, transparent);
+    border-radius: 9999px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
