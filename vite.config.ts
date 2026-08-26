@@ -4,6 +4,8 @@ import tailwindcss from '@tailwindcss/vite'
 import path from 'node:path'
 
 export default defineConfig({
+  // Served under /management/ on the reverse proxy (Caddy)
+  base: '/management/',
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {

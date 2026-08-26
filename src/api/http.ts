@@ -9,19 +9,15 @@ import { useAuthStore } from '@/store/auth'
 import { toast } from '@/components/ui/toast'
 import type { ApiResponse, AuthResponse, RefreshTokenRequest } from '@/api/types'
 
-const IS_DEV = import.meta.env.DEV
 const ENV_BASE = (import.meta.env.VITE_API_BASE_URL as string | undefined)?.trim()
 /**
  * Resolve the API base URL.
  * - Dev: relative URL so requests hit the Vite proxy toward the backend.
- * - Prod: explicit backend origin (override via VITE_API_BASE_URL).
+ * - Prod: same-origin relative URL by default (the backend is served on the
+ *   same origin via Caddy); override with VITE_API_BASE_URL when the API
+ *   lives on a different origin.
  */
-export const BASE_URL =
-  ENV_BASE?.length
-    ? ENV_BASE
-    : IS_DEV
-      ? ''
-      : 'http://100.122.220.40:8081'
+export const BASE_URL = ENV_BASE?.length ? ENV_BASE : ''
 
 /** Bare client used ONLY for token refresh, so the interceptors never recurse. */
 const refreshClient: AxiosInstance = axios.create({
