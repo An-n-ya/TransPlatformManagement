@@ -1,0 +1,55 @@
+name: Deploy to rain-server
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-main
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build frontend
+        run: pnpm build
+
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H "${{ secrets.SERVER_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null
+
+      - name: Deploy dist to server
+        run: |
+          rsync -avz --delete \
+            -e "ssh -i $HOME/.ssh/deploy_key -o ConnectTimeout=20" \
+            ./dist/ \
+            "${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/root/app/TransPlatformManagement/dist/"
+
+      - name: Verify deployment
+        run: |
+          ssh -i $HOME/.ssh/deploy_key \
+            -o ConnectTimeout=20 \
+            "${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}" \
+            'echo "--- dist/ ---" && ls /root/app/TransPlatformManagement/dist/ && echo "--- index.html asset refs ---" && grep -oE "(src|href)=\"[^\"]*\"" /root/app/TransPlatformManagement/dist/index.html'
