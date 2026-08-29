@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react'
-import { Copy, Link2, Loader2, Ticket } from 'lucide-react'
+import { Mail, Copy, Link2, Loader2, Ticket } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -24,6 +24,11 @@ export default function InvitationsPage() {
   const [scene, setScene] = useState('default')
   const [saving, setSaving] = useState(false)
   const [codes, setCodes] = useState<InvitationVO[]>([])
+  const [email, setEmail] = useState('')
+  const [emailDays, setEmailDays] = useState(7)
+  const [emailScene, setEmailScene] = useState('default')
+  const [sending, setSending] = useState(false)
+  const [sent, setSent] = useState<InvitationVO | null>(null)
 
   const generate = async (e: FormEvent) => {
     e.preventDefault()
@@ -40,6 +45,29 @@ export default function InvitationsPage() {
       toast('生成失败', { variant: 'error', description: (err as Error).message })
     } finally {
       setSaving(false)
+    }
+  }
+
+  const sendEmail = async (e: FormEvent) => {
+    e.preventDefault()
+    const trimmed = email.trim()
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
+      toast('邮箱格式不正确', { variant: 'error' })
+      return
+    }
+    setSending(true)
+    try {
+      const data = await invitationApi.sendEmail({
+        email: trimmed,
+        days: Math.max(1, Math.min(365, emailDays)),
+        scene: emailScene.trim() || 'default',
+      })
+      setSent(data)
+      toast('发送成功', { variant: 'success', description: `邀请码已发送至 ${trimmed}` })
+    } catch (err) {
+      toast('发送失败', { variant: 'error', description: (err as Error).message })
+    } finally {
+      setSending(false)
     }
   }
 
@@ -115,6 +143,73 @@ export default function InvitationsPage() {
               </Button>
             </div>
           </form>
+        </CardContent>
+      </Card>
+
+      {/* Email invitation form */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Mail className="h-4 w-4" /> 邮箱邀请
+          </CardTitle>
+          <CardDescription>POST /admin/v1/invitations/send-email</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={sendEmail} className="grid grid-cols-1 md:grid-cols-12 gap-3 items-end">
+            <div className="md:col-span-4 space-y-1.5">
+              <Label className="text-xs" htmlFor="email">目标邮箱</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="user@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+            <div className="md:col-span-3 space-y-1.5">
+              <Label className="text-xs" htmlFor="email-days">有效期（1-365 天）</Label>
+              <Input
+                id="email-days"
+                type="number"
+                min={1}
+                max={365}
+                value={emailDays}
+                onChange={(e) => setEmailDays(Number(e.target.value))}
+              />
+            </div>
+            <div className="md:col-span-3 space-y-1.5">
+              <Label className="text-xs" htmlFor="email-scene">场景标识</Label>
+              <Input
+                id="email-scene"
+                placeholder="default"
+                value={emailScene}
+                onChange={(e) => setEmailScene(e.target.value)}
+              />
+            </div>
+            <div className="md:col-span-2">
+              <Button type="submit" variant="default" className="w-full h-10" disabled={sending}>
+                {sending && <Loader2 className="h-4 w-4 animate-spin" />}
+                发送邀请
+              </Button>
+            </div>
+          </form>
+
+          {sent && (
+            <div className="mt-3 flex items-center gap-3 px-4 py-3.5 flex-wrap rounded-xl border border-border">
+              <Badge variant="outline" className="font-mono text-sm tabular-nums">
+                {sent.code}
+              </Badge>
+              <div className="flex-1 min-w-0 text-[11px] text-muted-foreground">
+                <div>已发送至：{email.trim()}</div>
+                <div>场景：{sent.scene}</div>
+                {sent.expiredAt && <div>到期：{formatDate(sent.expiredAt)}</div>}
+              </div>
+              <Badge variant={statusMeta(sent.status).variant}>{statusMeta(sent.status).label}</Badge>
+              <Button variant="ghost" size="sm" onClick={() => copy(sent.code)}>
+                <Copy className="h-3.5 w-3.5" /> 复制
+              </Button>
+            </div>
+          )}
         </CardContent>
       </Card>
 

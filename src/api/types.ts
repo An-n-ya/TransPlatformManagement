@@ -133,3 +133,9 @@ export interface GenerateInvitationRequest {
   days?: number
   scene?: string
 }
+
+export interface SendInvitationEmailRequest {
+  email: string
+  days?: number
+  scene?: string
+}
