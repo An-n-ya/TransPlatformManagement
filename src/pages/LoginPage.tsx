@@ -10,6 +10,7 @@ import { authApi } from '@/api'
 import { useAuthStore } from '@/store/auth'
 import { toast } from '@/components/ui/toast'
 import { cn } from '@/lib/utils'
+import logo from '@/assets/logo.png'
 
 export default function LoginPage() {
   const navigate = useNavigate()
@@ -67,12 +68,14 @@ export default function LoginPage() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_10%,rgba(38,38,38,0.08),transparent_45%),radial-gradient(circle_at_85%_80%,rgba(241,90,43,0.12),transparent_45%)]" />
         <div className="relative z-10 flex flex-col justify-between p-12 w-full">
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-2xl bg-[#262626] flex items-center justify-center text-white text-base font-bold shadow-lg">
-              U
-            </div>
+            <img
+              src={logo}
+              alt="YX Logo"
+              className="h-10 w-10 rounded-2xl object-contain bg-white/70 shadow-lg"
+            />
             <div>
-              <div className="text-lg font-semibold tracking-tight">UGC 管理控制台</div>
-              <div className="text-xs text-muted-foreground">创作者经济 · 平台管理端</div>
+              <div className="text-lg font-semibold tracking-tight">YX · 银杏叶社区</div>
+              <div className="text-xs text-muted-foreground">跨性别社区 · 管理后台</div>
             </div>
           </div>
 
@@ -82,18 +85,18 @@ export default function LoginPage() {
               平台运行状态：一切正常
             </div>
             <h1 className="text-4xl font-semibold tracking-tight leading-[1.15]">
-              管理创作者，
+              守护社区，
               <br />
-              驱动社区增长。
+              连接每一位成员。
             </h1>
             <p className="text-[15px] text-muted-foreground leading-relaxed">
-              一个后台管理创作者、用户、内容与数据洞察。实时监控平台健康度，审核投稿，维护社区秩序。
+              一站式管理用户、内容、话题与邀请码。实时监控社区健康度，维护安全、包容的社区秩序。
             </p>
           </div>
 
           <div className="flex items-center gap-3 text-[11px] text-muted-foreground">
             <Separator className="flex-1 bg-border/70" />
-            <span>为平台运营团队打造</span>
+            <span>为 YX 社区运营团队打造</span>
             <Separator className="flex-1 bg-border/70" />
           </div>
         </div>
@@ -103,11 +106,13 @@ export default function LoginPage() {
       <div className="flex-1 flex items-center justify-center p-6 lg:p-12 bg-background">
         <div className="w-full max-w-md">
           <div className="lg:hidden flex items-center gap-2 mb-8">
-            <div className="h-9 w-9 rounded-xl bg-[#262626] flex items-center justify-center text-white text-sm font-bold">
-              U
-            </div>
+            <img
+              src={logo}
+              alt="YX Logo"
+              className="h-9 w-9 rounded-xl object-contain bg-white/70"
+            />
             <div>
-              <div className="text-[15px] font-semibold tracking-tight">UGC 管理控制台</div>
+              <div className="text-[15px] font-semibold tracking-tight">YX · 银杏叶社区</div>
               <div className="text-[11px] text-muted-foreground">管理员 · 登录</div>
             </div>
           </div>
